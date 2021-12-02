@@ -25,6 +25,33 @@ Three additional containers are included that handle Composer, NPM, and Artisan 
 - `docker-compose run --rm npm run dev`
 - `docker-compose run --rm artisan migrate`
 
+## This is where your Laravel app goes
+
+To get started, **delete this file** and then do one of the following:
+
+- Clone your project or copy all of the files directly into this `src` directory.
+- Spin up the Docker network by following the instructions on the main [README.md](../README.md), and install a brand new Laravel project by running `docker-compose run --rm composer create-project laravel/laravel .` in your terminal.
+
+## Using BrowserSync with Laravel Mix
+
+If you want to enable the hot-reloading that comes with Laravel Mix's BrowserSync option, you'll have to follow a few small steps. First, ensure that you're using the updated `docker-compose.yml` with the `:3000` and `:3001` ports open on the npm service. Then, add the following to the end of your Laravel project's `webpack.mix.js` file:
+
+```javascript
+.browserSync({
+    proxy: 'site',
+    open: false,
+    port: 3000,
+});
+```
+
+From your terminal window at the project root, run the following command to start watching for changes with the npm container and its mapped ports:
+
+```bash
+docker-compose run --rm --service-ports npm run watch
+```
+
+That should keep a small info pane open in your terminal (which you can exit with Ctrl + C). Visiting [localhost:3000](http://localhost:3000) in your browser should then load up your Laravel application with BrowserSync enabled and hot-reloading active.
+
 ## Permissions Issues
 
 If you encounter any issues with filesystem permissions while visiting your application or running a container command, try completing one of the sets of steps below.
@@ -56,25 +83,6 @@ volumes:
   - ./mysql:/var/lib/mysql
 ```
 
-## Using BrowserSync with Laravel Mix
-
-If you want to enable the hot-reloading that comes with Laravel Mix's BrowserSync option, you'll have to follow a few small steps. First, ensure that you're using the updated `docker-compose.yml` with the `:3000` and `:3001` ports open on the npm service. Then, add the following to the end of your Laravel project's `webpack.mix.js` file:
-
-```javascript
-.browserSync({
-    proxy: 'site',
-    open: false,
-    port: 3000,
-});
-```
-
-From your terminal window at the project root, run the following command to start watching for changes with the npm container and its mapped ports:
-
-```bash
-docker-compose run --rm --service-ports npm run watch
-```
-
-That should keep a small info pane open in your terminal (which you can exit with Ctrl + C). Visiting [localhost:3000](http://localhost:3000) in your browser should then load up your Laravel application with BrowserSync enabled and hot-reloading active.
 
 ## MailHog
 
